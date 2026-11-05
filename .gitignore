@@ -1,0 +1,21 @@
+# 운영체제 및 에디터 임시 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+*.swp
+
+# 수집 원본 백업 파일 (정제된 배포 파일만 게시 대상)
+raw_stock_data.json
+raw_news_data.json
+
+# 환경 변수, 개인 인증키, 비밀 설정 파일 (보안 방지)
+.env
+.env.*
+*.key
+*.pem
+*.token
+*.log
+id_rsa
+id_ed25519
