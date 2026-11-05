@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>테슬라(Tesla, Inc.) 주식 보고서 최종본 - 초보자용 가이드</title>
+  <style>
+    /*
+      =======================================================
+      NVIDIA 스타일 다크 엔지니어링 디자인 시스템
+      - 피치 블랙(#000000) & 딥 차콜(#141414, #1e1e1e)
+      - 시그니처 엔비디아 그린(#76b900) 포인트 & 액센트 라인
+      - 날렵하고 정교한 지표 패널 (border-radius: 2px, 1px 헤어라인)
+      - 인쇄 및 PDF 저장 시에도 화면의 고유 디자인과 색상을 100% 그대로 보존
+      =======================================================
+    */
+    :root {
+      --nv-black: #000000;
+      --nv-panel-bg: #141414;
+      --nv-panel-surface: #1e1e1e;
+      --nv-panel-hover: #262626;
+
+      --nv-green: #76b900;
+      --nv-green-hover: #8ee000;
+      --nv-green-glow: rgba(118, 185, 0, 0.3);
+
+      --nv-text-white: #ffffff;
+      --nv-text-gray: #e0e0e0;
+      --nv-text-muted: #9e9e9e;
+      --nv-text-sub: #757575;
+
+      --nv-border-dark: #2a2a2a;
+      --nv-radius: 2px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      color-scheme: dark;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: "NVIDIA Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--nv-text-white);
+      background-color: var(--nv-black) !important;
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(118, 185, 0, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 90%, rgba(118, 185, 0, 0.03) 0%, transparent 40%);
+      background-attachment: fixed;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* 상단 액션 바 (인쇄 / 독립 HTML 다운로드) */
+    .action-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: -0.5rem;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--nv-panel-surface);
+      border: 1px solid var(--nv-border-dark);
+      color: #ffffff;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: var(--nv-radius);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--nv-panel-hover);
+      border-color: var(--nv-green);
+      color: var(--nv-green);
+    }
+
+    .action-btn.primary {
+      background: rgba(118, 185, 0, 0.15);
+      border-color: var(--nv-green);
+      color: var(--nv-green);
+    }
+
+    .action-btn.primary:hover {
+      background: var(--nv-green);
+      color: #000000;
+    }
+
+    /* 유의사항 배너 */
+    .disclaimer-banner {
+      background: #0d0d0d !important;
+      border: 1px solid #333333 !important;
+      border-left: 4px solid var(--nv-green) !important;
+      border-radius: var(--nv-radius);
+      padding: 1.1rem 1.35rem;
+      font-size: 0.9rem;
+      color: var(--nv-text-gray) !important;
+    }
+
+    .disclaimer-banner strong {
+      display: inline-block;
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+      color: #ffffff !important;
+      letter-spacing: 0.01em;
+    }
+
+    /* 카드 패널 */
+    .card {
+      background: var(--nv-panel-bg) !important;
+      border: 1px solid var(--nv-border-dark) !important;
+      border-radius: var(--nv-radius);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .card:hover {
+      border-color: #404040;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff !important;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff !important;
+      margin-bottom: 1.15rem;
+      border-bottom: 1px solid var(--nv-border-dark) !important;
+      padding-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 1.1em;
+      background: var(--nv-green) !important;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff !important;
+      margin: 1.35rem 0 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      margin-bottom: 0.85rem;
+      color: var(--nv-text-gray) !important;
+    }
+
+    .sub-desc {
+      color: var(--nv-text-muted) !important;
+      font-size: 0.95rem;
+    }
+
+    /* 메타데이터 메트릭스 패널 */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.35rem;
+    }
+
+    .meta-item {
+      background: var(--nv-panel-surface) !important;
+      border: 1px solid var(--nv-border-dark) !important;
+      border-radius: var(--nv-radius);
+      padding: 1.15rem;
+      transition: all 0.2s ease;
+    }
+
+    .meta-item:hover {
+      border-color: var(--nv-green);
+      background: var(--nv-panel-hover);
+    }
+
+    .meta-item .label {
+      font-size: 0.75rem;
+      color: var(--nv-text-sub) !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+    }
+
+    .meta-item .value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff !important;
+      word-break: break-all;
+      letter-spacing: -0.02em;
+    }
+
+    /* 3문장 핵심 요약 카드 */
+    .summary-card {
+      background: #0d1406 !important;
+      border: 1px solid var(--nv-green) !important;
+      border-radius: var(--nv-radius);
+    }
+
+    .summary-card h2 {
+      color: var(--nv-green) !important;
+      border-bottom-color: rgba(118, 185, 0, 0.3) !important;
+    }
+
+    .summary-card h2::before {
+      background: #ffffff !important;
+    }
+
+    .summary-card ol {
+      padding-left: 1.4rem;
+      margin-top: 0.85rem;
+    }
+
+    .summary-card li {
+      font-size: 1.02rem;
+      font-weight: 500;
+      color: #ffffff !important;
+      margin-bottom: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .summary-card li strong {
+      color: var(--nv-green) !important;
+    }
+
+    /* 차트 및 시각화 패널 */
+    .chart-container {
+      width: 100%;
+      margin: 1.5rem 0;
+      background: #090909 !important;
+      border: 1px solid var(--nv-border-dark) !important;
+      border-radius: var(--nv-radius);
+      padding: 1.35rem;
+      overflow-x: auto;
+    }
+
+    svg {
+      width: 100%;
+      min-width: 520px;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    /* 3분류(사실/해석/질문) 그리드 */
+    .triad-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.15rem;
+      margin-top: 1.35rem;
+    }
+
+    .triad-box {
+      border-radius: var(--nv-radius);
+      padding: 1.5rem;
+      background: var(--nv-panel-surface) !important;
+      border: 1px solid var(--nv-border-dark) !important;
+      transition: all 0.2s ease;
+    }
+
+    .triad-box:hover {
+      border-color: #555555;
+    }
+
+    .triad-box.fact {
+      border-top: 3px solid var(--nv-green) !important;
+    }
+
+    .triad-box.interpret {
+      border-top: 3px solid #ffffff !important;
+    }
+
+    .triad-box.question {
+      border-top: 3px solid #ffaa00 !important;
+    }
+
+    .triad-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .triad-box.fact .triad-title { color: var(--nv-green) !important; }
+    .triad-box.interpret .triad-title { color: #ffffff !important; }
+    .triad-box.question .triad-title { color: #ffaa00 !important; }
+
+    ul {
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    li {
+      margin-bottom: 0.55rem;
+      font-size: 0.95rem;
+      color: var(--nv-text-gray) !important;
+    }
+
+    li strong {
+      color: #ffffff !important;
+    }
+
+    /* 뉴스 리스트 */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      margin-top: 1.35rem;
+    }
+
+    .news-item {
+      background: var(--nv-panel-surface) !important;
+      border: 1px solid var(--nv-border-dark) !important;
+      border-radius: var(--nv-radius);
+      padding: 1.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .news-item:hover {
+      border-color: var(--nv-green);
+      background: var(--nv-panel-hover);
+    }
+
+    .news-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.65rem;
+    }
+
+    .news-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #ffffff !important;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .news-meta {
+      font-size: 0.85rem;
+      color: var(--nv-text-sub) !important;
+      display: flex;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.65rem;
+    }
+
+    .news-meta strong {
+      color: var(--nv-text-muted) !important;
+    }
+
+    .news-scope-badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--nv-radius);
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(255, 170, 0, 0.15) !important;
+      color: #ffaa00 !important;
+      border: 1px solid rgba(255, 170, 0, 0.35) !important;
+      white-space: nowrap;
+    }
+
+    .news-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      color: var(--nv-green) !important;
+      text-decoration: none;
+      word-break: break-all;
+      font-weight: 700;
+    }
+
+    .news-link:hover {
+      text-decoration: underline;
+      color: var(--nv-green-hover) !important;
+    }
+
+    /* 테이블 */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 1.35rem;
+      border: 1px solid var(--nv-border-dark) !important;
+      border-radius: var(--nv-radius);
+      background: var(--nv-panel-surface) !important;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 0.9rem 1.15rem;
+      border-bottom: 1px solid var(--nv-border-dark) !important;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #0a0a0a !important;
+      font-weight: 700;
+      color: var(--nv-green) !important;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+    }
+
+    td {
+      color: var(--nv-text-gray) !important;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(118, 185, 0, 0.06);
+    }
+
+    /* 태그 */
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--nv-radius);
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-danger {
+      background: rgba(239, 68, 68, 0.2) !important;
+      color: #fca5a5 !important;
+      border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    }
+
+    .tag-success {
+      background: rgba(118, 185, 0, 0.15) !important;
+      color: var(--nv-green) !important;
+      border: 1px solid var(--nv-green) !important;
+    }
+
+    .tag-neutral {
+      background: #2a2a2a !important;
+      color: #ffffff !important;
+      border: 1px solid #444444 !important;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--nv-text-sub);
+      padding: 2.5rem 0 1rem;
+    }
+
+    /* 초보자 가이드 팁 박스 */
+    .tip-box {
+      background: var(--nv-panel-surface) !important;
+      border-left: 4px solid var(--nv-green) !important;
+      padding: 1rem 1.25rem;
+      margin: 1.15rem 0;
+      font-size: 0.95rem;
+      color: #ffffff !important;
+      border-radius: 0 var(--nv-radius) var(--nv-radius) 0;
+      border-top: 1px solid var(--nv-border-dark) !important;
+      border-right: 1px solid var(--nv-border-dark) !important;
+      border-bottom: 1px solid var(--nv-border-dark) !important;
+    }
+
+    .term-badge {
+      background-color: rgba(118, 185, 0, 0.15) !important;
+      color: var(--nv-green) !important;
+      border: 1px solid rgba(118, 185, 0, 0.35) !important;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--nv-radius);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 0.4rem;
+      display: inline-block;
+    }
+
+    /* 모바일 최적화 미디어 쿼리 */
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+      .card {
+        padding: 1.25rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+      .news-header {
+        flex-direction: column;
+      }
+      .action-bar {
+        justify-content: stretch;
+      }
+      .action-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
+    /* 인쇄 및 PDF 저장(@media print) 전용 최적화: 화면 디자인 100% 동일 유지 */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm 12mm 10mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      html, body {
+        background-color: #000000 !important;
+        background: #000000 !important;
+        color: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 9.5pt !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        gap: 1.15rem !important;
+        padding: 0 !important;
+      }
+
+      /* 인쇄 시 화면 상단 조작 버튼 숨김 */
+      .action-bar {
+        display: none !important;
+      }
+
+      /* 자연스러운 페이지 분할 방지 */
+      .card, .disclaimer-banner, .summary-card, .chart-container, .triad-box, .news-item {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      h1 { font-size: 16pt !important; color: #ffffff !important; }
+      h2 { font-size: 12pt !important; color: #ffffff !important; }
+      h3 { font-size: 10.5pt !important; color: #ffffff !important; }
+
+      .meta-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.6rem !important;
+      }
+
+      .meta-item {
+        padding: 0.75rem !important;
+      }
+
+      .meta-item .value {
+        font-size: 11pt !important;
+      }
+
+      .chart-container {
+        padding: 0.85rem !important;
+        background: #090909 !important;
+        border: 1px solid #2a2a2a !important;
+      }
+
+      svg text {
+        fill: #757575 !important;
+      }
+
+      footer {
+        padding: 1rem 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 상단 다운로드 및 인쇄/PDF 저장 액션 바 -->
+  <div class="action-bar">
+    <a href="stock-report.html" download="stock-report.html" class="action-btn">
+      💾 독립 HTML 파일 저장
+    </a>
+    <button onclick="window.print()" class="action-btn primary">
+      🖨️ 인쇄 / PDF로 저장
+    </button>
+  </div>
+
+  <!-- 1. 필수 유의사항 배너 -->
+  <aside class="disclaimer-banner">
+    <strong>⚠️ 독자 안내 및 주의사항</strong>
+    <p>본 문서는 <strong>AI 초안</strong>이며, 사전에 수집·저장된 <strong>저장 자료 기준</strong>으로 작성되었습니다. <strong>실시간 시세가 아닙니다.</strong></p>
+    <p>본 보고서는 투자 권유, 목표주가 제시 또는 특정 수익 보장을 목적으로 하지 않으며, 매수·매도에 따른 모든 판단과 책임은 투자자 본인에게 있습니다.</p>
+  </aside>
+
+  <!-- 2. 헤더 및 종목 기본 정보 -->
+  <header class="card">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+      <div>
+        <h1>Tesla, Inc. (테슬라) <span class="tag tag-neutral">NASDAQ : TSLA</span></h1>
+        <p class="sub-desc">미국 나스닥(NASDAQ)에 상장된 글로벌 전기차(EV), 에너지 저장 장치 및 소프트웨어 제조 기업</p>
+      </div>
+      <div>
+        <span class="tag tag-danger">실시간 시세 아님</span>
+      </div>
+    </div>
+
+    <!-- 기준 메타데이터 패널 -->
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="label">상장 거래소 / 종목코드 (티커)</div>
+        <div class="value">NASDAQ / TSLA</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">거래 통화</div>
+        <div class="value">USD ($)</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">시세 데이터 조회 기간</div>
+        <div class="value">2026-10-05 ~ 2026-11-04</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">마지막 거래일 종가 (기준일)</div>
+        <div class="value">385.19 USD <span style="font-size:0.85rem; color:var(--nv-green); font-weight:normal;">(2026-11-04)</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="label">보고서 작성 시각</div>
+        <div class="value" style="font-size:0.95rem;">2026-11-05 21:21:00</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">자료 수집 시각</div>
+        <div class="value" style="font-size:0.95rem;">2026-11-05 20:38:37 / 20:47:24</div>
+      </div>
+      <div class="meta-item" style="grid-column: 1 / -1;">
+        <div class="label">데이터 출처</div>
+        <div class="value" style="font-size:0.95rem;">Yahoo Finance API (로컬 저장본: tesla_stock_data.json, tesla_news_data.json)</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. 핵심 요약 (3문장 안팎 전진 배치) -->
+  <section class="card summary-card">
+    <h2 style="color:var(--nv-green); border-bottom-color:rgba(118, 185, 0, 0.3);">⚡ 한눈에 보는 핵심 요약 (3문장 정리)</h2>
+    <ol>
+      <li><strong>기업 본업:</strong> 테슬라는 전기차(Model 3·Y 등) 판매를 중심으로 대형 배터리 에너지 저장 장치와 자율주행 소프트웨어를 함께 만드는 미국 상장 기술기업입니다.</li>
+      <li><strong>1개월 가격 흐름:</strong> 최근 1개월(2026.10.05~11.04) 저장된 종가는 378.73달러에서 385.19달러로 1.71%(+6.46달러) 소폭 올랐으나, 기간 중 최저 354.72달러와 최고 407.46달러 사이를 오가며 단기 등락 폭이 컸습니다. [출처: 로컬 시세 데이터]</li>
+      <li><strong>초보자 주의점:</strong> 수집된 5건의 최신 기사는 선거 결과와 정책 리스크 등을 다루고 있으나 뉴스를 주가 등락의 단독 원인으로 단정할 수 없으며, 미래 수익이나 목표가를 보장하지 않으므로 추가 공시 확인이 필수적입니다. [출처: 로컬 뉴스 데이터]</li>
+    </ol>
+  </section>
+
+  <!-- 4. 회사 소개 (입문자 맞춤형 용어 풀이 적용) -->
+  <section class="card">
+    <h2>1. 테슬라는 어떤 회사인가요?</h2>
+    <div class="tip-box">
+      💡 <strong>초보자를 위한 한 줄 정의:</strong> 테슬라는 기름으로 달리는 내연기관차 대신 전기로 움직이는 자동차를 대중화시켰고, 태양광과 대형 배터리, 자율주행 소프트웨어까지 함께 만드는 종합 에너지·모빌리티 기업입니다.
+    </div>
+
+    <!-- 초보자를 위한 핵심 용어 사전 -->
+    <div class="tip-box" style="border-left-color: var(--nv-green); background: rgba(118, 185, 0, 0.08); border-color: rgba(118, 185, 0, 0.3);">
+      <strong style="color:var(--nv-green);">📖 초보자를 위한 첫걸음 용어 풀이</strong>
+      <p style="margin-top:0.4rem; margin-bottom:0.25rem;"><span class="term-badge">종목코드 (티커)</span> 주식시장에서 회사를 빠르게 찾고 거래할 수 있도록 알파벳으로 붙인 고유 약칭입니다. (예: 테슬라는 TSLA)</p>
+      <p style="margin-bottom:0.25rem;"><span class="term-badge">종가 (Closing Price)</span> 주식시장이 하루 거래를 마감하는 순간 마지막으로 체결된 최종 가격을 뜻합니다.</p>
+      <p style="margin-bottom:0;"><span class="term-badge">배당금 (Dividend)</span> 기업이 사업으로 벌어들인 이익의 일부를 주주들에게 현금으로 나누어주는 돈을 말합니다.</p>
+    </div>
+
+    <h3>주요 사업 부문</h3>
+    <ul>
+      <li><strong>전기차(Automotive):</strong> Model 3, Model Y, Model S, Model X, Cybertruck 등의 전기 승용차 및 상용차를 개발·제조·판매합니다. 충전망(슈퍼차저) 및 차량 정비 서비스도 포함됩니다.</li>
+      <li><strong>에너지 저장 및 발전(Energy Storage):</strong> 가정용 축전지(Powerwall)와 산업용 대용량 축전 시스템(Megapack), 태양광 패널 등을 공급하여 재생에너지를 저장·사용하도록 돕습니다.</li>
+      <li><strong>자율주행 및 AI(Services & Autonomy):</strong> 카메라와 컴퓨터 비전을 이용한 주행 보조 시스템(FSD, Full Self-Driving), 차량용 소프트웨어 구독 및 미래형 인공지능 로봇(Optimus)을 연구합니다.</li>
+    </ul>
+
+    <div class="tip-box">
+      📌 <strong>배당금 유무:</strong> 테슬라는 현재 주주들에게 현금 배당금을 지급하지 않습니다. 벌어들인 이익을 공장 증설, 배터리 연구개발(R&D), 신기술 투자에 전액 재투자하고 있습니다. [출처: 공식 IR 안내]
+    </div>
+  </section>
+
+  <!-- 5. 최근 1개월 저장 종가 흐름 및 인터랙티브 차트 -->
+  <section class="card">
+    <h2>2. 최근 1개월 저장 종가 흐름 (2026.10.05 ~ 2026.11.04)</h2>
+    <p class="sub-desc">로컬에 저장된 일별 거래 데이터(23거래일)를 바탕으로 그린 종가 변동 추이입니다. 차트의 점에 마우스를 올리거나 터치하면 해당 일자의 종가를 확인할 수 있습니다. [출처: tesla_stock_data.json]</p>
+
+    <div class="chart-container">
+      <svg id="stockChart" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet">
+        <!-- SVG 차트가 자바스크립트로 그려집니다 -->
+      </svg>
+      <div id="tooltip" style="display:none; position:relative; background:#000000; border:1px solid var(--nv-green); color:var(--nv-green); padding:6px 12px; border-radius:var(--nv-radius); font-size:12px; width:fit-content; margin-top:8px; box-shadow:0 4px 12px rgba(0,0,0,0.8); font-weight:700;"></div>
+    </div>
+
+    <!-- 변동 요약 통계 패널 -->
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="label">기간 시작 종가 (10/05)</div>
+        <div class="value">378.73 USD</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">기간 마지막 종가 (11/04)</div>
+        <div class="value">385.19 USD</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">기간 내 최고 종가</div>
+        <div class="value" style="color:#ff6b6b;">407.46 USD <span style="font-size:0.8rem; font-weight:normal; color:var(--nv-text-sub);">(10/27)</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="label">기간 내 최저 종가</div>
+        <div class="value" style="color:#60a5fa;">354.72 USD <span style="font-size:0.8rem; font-weight:normal; color:var(--nv-text-sub);">(10/16)</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="label">1개월 종가 단순 변동률</div>
+        <div class="value" style="color:var(--nv-green);">+1.71% <span style="font-size:0.8rem; font-weight:normal; color:var(--nv-text-sub);">(+6.46 USD)</span></div>
+      </div>
+    </div>
+
+    <!-- 최근 5거래일 간략 테이블 -->
+    <h3 style="margin-top:1.5rem;">최근 5거래일 상세 기록</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>날짜</th>
+            <th>시가 (Open)</th>
+            <th>고가 (High)</th>
+            <th>저가 (Low)</th>
+            <th>종가 (Close)</th>
+            <th>거래량 (Volume)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2026-11-04 (마지막 거래일)</td>
+            <td>379.80 USD</td>
+            <td>392.04 USD</td>
+            <td>375.50 USD</td>
+            <td><strong style="color:var(--nv-green);">385.19 USD</strong></td>
+            <td>47,673,700 주</td>
+          </tr>
+          <tr>
+            <td>2026-11-03</td>
+            <td>406.25 USD</td>
+            <td>406.50 USD</td>
+            <td>396.53 USD</td>
+            <td>398.50 USD</td>
+            <td>26,647,700 주</td>
+          </tr>
+          <tr>
+            <td>2026-11-02</td>
+            <td>404.66 USD</td>
+            <td>414.23 USD</td>
+            <td>397.61 USD</td>
+            <td>403.82 USD</td>
+            <td>43,141,100 주</td>
+          </tr>
+          <tr>
+            <td>2026-10-30</td>
+            <td>393.22 USD</td>
+            <td>404.22 USD</td>
+            <td>387.52 USD</td>
+            <td>399.81 USD</td>
+            <td>41,737,200 주</td>
+          </tr>
+          <tr>
+            <td>2026-10-29</td>
+            <td>405.63 USD</td>
+            <td>406.98 USD</td>
+            <td>400.50 USD</td>
+            <td>403.30 USD</td>
+            <td>22,858,300 주</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sub-desc" style="margin-top:0.65rem;">* 전체 23거래일 세부 수치는 상대 경로의 <code>tesla_stock_data.json</code> 파일에 보관되어 있습니다.</p>
+  </section>
+
+  <!-- 6. 관련 뉴스 및 출처 근거 -->
+  <section class="card">
+    <h2>3. 테슬라 관련 최신 뉴스 및 수집 근거</h2>
+    <p class="sub-desc">
+      공개 피드(Yahoo Finance News Feed)에서 수집해 로컬(<code>tesla_news_data.json</code>)에 저장한 테슬라 관련 기사 5건입니다.<br>
+      <strong>원칙 준수:</strong> 웹 방화벽 및 스크립트 렌더링 제약으로 본문 전문을 읽지 못한 기사는 임의 요약을 금지하고 <strong>[제목·메타정보만 확인]</strong>으로 투명하게 표기했습니다.
+    </p>
+
+    <div class="news-list">
+
+      <!-- 기사 1 -->
+      <article class="news-item">
+        <div class="news-header">
+          <h4 class="news-title">1. Tesla (TSLA) Faces Texas Democratic Sweep That Threatens AI And Autonomy Plans</h4>
+          <span class="news-scope-badge">제목·메타정보만 확인</span>
+        </div>
+        <div class="news-meta">
+          <span>📰 매체: <strong>Simply Wall St.</strong></span>
+          <span>📅 발행: <strong>2026-11-05 20:11:23</strong></span>
+          <span>⏱️ 수집: <strong>2026-11-05 20:47:24</strong></span>
+        </div>
+        <p style="font-size:0.92rem; color:var(--nv-text-gray);">
+          <strong>확인된 범위 및 내용:</strong> 제목에서 텍사스주 선거 결과가 테슬라의 AI 및 자율주행(Autonomy) 계획에 미칠 규제/정치적 위험을 다루고 있음을 확인했습니다. (본문 미열람으로 자의적 본문 요약은 생략합니다.)
+        </p>
+        <a href="https://finance.yahoo.com/technology/ai/articles/tesla-tsla-faces-texas-democratic-111123725.html" target="_blank" rel="noopener noreferrer" class="news-link">
+          🔗 원문 링크 열기 (외부 기사)
+        </a>
+      </article>
+
+      <!-- 기사 2 -->
+      <article class="news-item">
+        <div class="news-header">
+          <h4 class="news-title">2. What the Democratic landslide means for GOP booster Elon Musk and his businesses</h4>
+          <span class="news-scope-badge">제목·메타정보만 확인</span>
+        </div>
+        <div class="news-meta">
+          <span>📰 매체: <strong>LA Times</strong></span>
+          <span>📅 발행: <strong>2026-11-05 20:00:00</strong></span>
+          <span>⏱️ 수집: <strong>2026-11-05 20:47:24</strong></span>
+        </div>
+        <p style="font-size:0.92rem; color:var(--nv-text-gray);">
+          <strong>확인된 범위 및 내용:</strong> 미국 선거 결과가 공화당을 지원해 온 일론 머스크와 그가 이끄는 기업군(테슬라 등)의 규제 환경에 미칠 영향을 다루고 있음을 제목 수준에서 확인했습니다. (본문 미열람)
+        </p>
+        <a href="https://finance.yahoo.com/technology/ai/articles/democratic-landslide-means-gop-booster-110000010.html" target="_blank" rel="noopener noreferrer" class="news-link">
+          🔗 원문 링크 열기 (외부 기사)
+        </a>
+      </article>
+
+      <!-- 기사 3 -->
+      <article class="news-item">
+        <div class="news-header">
+          <h4 class="news-title">3. US Futures Mixed After Rally On Wednesday - MU, TSLA, AAPL, MSFT, APP, NVDA, IREN In Focus</h4>
+          <span class="news-scope-badge">제목·메타정보만 확인</span>
+        </div>
+        <div class="news-meta">
+          <span>📰 매체: <strong>Stocktwits</strong></span>
+          <span>📅 발행: <strong>2026-11-05 19:10:26</strong></span>
+          <span>⏱️ 수집: <strong>2026-11-05 20:47:24</strong></span>
+        </div>
+        <p style="font-size:0.92rem; color:var(--nv-text-gray);">
+          <strong>확인된 범위 및 내용:</strong> 미국 증시 선물 시장 흐름 가운데 주요 주목 종목 중 하나로 TSLA(테슬라)가 포함되어 거래 분위기를 전하고 있음을 확인했습니다. (본문 미열람)
+        </p>
+        <a href="https://finance.yahoo.com/markets/stocks/articles/us-futures-mixed-rally-wednesday-101026817.html" target="_blank" rel="noopener noreferrer" class="news-link">
+          🔗 원문 링크 열기 (외부 기사)
+        </a>
+      </article>
+
+      <!-- 기사 4 -->
+      <article class="news-item">
+        <div class="news-header">
+          <h4 class="news-title">4. TSLA Stock Slips Overnight: Analysts Flag Political, Premium Risks To SpaceX Merger - Cathie Wood's ARK Buys Anyway</h4>
+          <span class="news-scope-badge">제목·메타정보만 확인</span>
+        </div>
+        <div class="news-meta">
+          <span>📰 매체: <strong>Stocktwits</strong></span>
+          <span>📅 발행: <strong>2026-11-05 14:22:12</strong></span>
+          <span>⏱️ 수집: <strong>2026-11-05 20:47:24</strong></span>
+        </div>
+        <p style="font-size:0.92rem; color:var(--nv-text-gray);">
+          <strong>확인된 범위 및 내용:</strong> 분석가들이 정치적 요인 및 합병 관련 리스크를 지적하는 가운데 아크 인베스트(Cathie Wood's ARK)가 테슬라 주식을 매수했다는 시장 움직임을 제목에서 확인했습니다. (본문 미열람)
+        </p>
+        <a href="https://finance.yahoo.com/markets/stocks/articles/tsla-stock-slips-overnight-analysts-052212373.html" target="_blank" rel="noopener noreferrer" class="news-link">
+          🔗 원문 링크 열기 (외부 기사)
+        </a>
+      </article>
+
+      <!-- 기사 5 -->
+      <article class="news-item">
+        <div class="news-header">
+          <h4 class="news-title">5. Tesla, Uber Could Triple In 5 Years? Elon Musk Ally Jason Calacanis Says Both Stocks Are '50% Undervalued'</h4>
+          <span class="news-scope-badge">제목·메타정보만 확인</span>
+        </div>
+        <div class="news-meta">
+          <span>📰 매체: <strong>Stocktwits</strong></span>
+          <span>📅 발행: <strong>2026-11-05 13:15:25</strong></span>
+          <span>⏱️ 수집: <strong>2026-11-05 20:47:24</strong></span>
+        </div>
+        <p style="font-size:0.92rem; color:var(--nv-text-gray);">
+          <strong>확인된 범위 및 내용:</strong> 일론 머스크의 측근으로 알려진 제이슨 칼라카니스가 테슬라 주식이 저평가되어 있다는 견해를 밝혔다는 인터뷰/언급 기사 제목을 확인했습니다. (본문 미열람)
+        </p>
+        <a href="https://finance.yahoo.com/markets/stocks/articles/tesla-uber-could-triple-5-041525654.html" target="_blank" rel="noopener noreferrer" class="news-link">
+          🔗 원문 링크 열기 (외부 기사)
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 7. 핵심 분석 (사실 / 자료에 근거한 AI 해석 / 남은 질문 3분류) -->
+  <section class="card">
+    <h2>4. 심층 분석: 사실·해석·남은 질문</h2>
+    <p class="sub-desc">주식 초보 독자가 주관적 풍문에 휘둘리지 않도록 검증된 <strong>사실</strong>, 통계에 기초한 <strong>AI 해석</strong>, 그리고 추가 조사가 필요한 <strong>남은 질문</strong>을 엄격히 분리하였습니다.</p>
+
+    <div class="triad-grid">
+      <!-- 1. 사실 -->
+      <div class="triad-box fact">
+        <div class="triad-title">
+          <span>📌 확인된 사실 (Fact)</span>
+        </div>
+        <ul>
+          <li><strong>거래소/티커:</strong> 미국 나스닥(NASDAQ)에 'TSLA'로 정식 상장되어 거래 중입니다. [출처: Nasdaq 공식]</li>
+          <li><strong>1개월 종가 기록:</strong> 2026-10-05(378.73달러)부터 2026-11-04(385.19달러)까지 종가는 최저 354.72달러(10/16)에서 최고 407.46달러(10/27) 사이였습니다. [출처: tesla_stock_data.json]</li>
+          <li><strong>단순 변동 수치:</strong> 해당 23거래일 동안 종가는 6.46달러(+1.71%) 변동했습니다. [출처: tesla_stock_data.json]</li>
+          <li><strong>수집 기사 현황:</strong> 2026년 11월 5일 수집 기준, 주요 헤드라인은 정치·선거 환경과 테슬라의 AI/자율주행 규제 리스크, 주요 기관의 매매 동향을 다루고 있습니다. [출처: tesla_news_data.json]</li>
+        </ul>
+      </div>
+
+      <!-- 2. AI 해석 -->
+      <div class="triad-box interpret">
+        <div class="triad-title">
+          <span>🔍 자료에 근거한 AI 해석 (Interpretation)</span>
+        </div>
+        <ul>
+          <li><strong>인과관계 단정 배제:</strong> 특정 뉴스가 11월 4일 종가(385.19달러) 형성의 직접적 원인이라고 단정할 수 없으며, 시장 가격은 거래량, 거시경제 지표, 기관 매매 등 복합적 요인이 결합된 결과입니다. [근거: 다변량 시장 메커니즘 원칙]</li>
+          <li><strong>헤드라인 편향 주의:</strong> '5년 내 3배 상승 주장'이나 '정치적 리스크 부각'과 같은 뉴스는 개별 시장 참여자의 주관적 시각이나 자극적 헤드라인일 수 있으므로 이를 테슬라의 확정된 미래로 해석해서는 안 됩니다. [근거: 기사 5건 제목 검토]</li>
+          <li><strong>변동성 체감:</strong> 1개월 전체 변동(+1.71%)에 비해 10월 중순~말 사이 14%가 넘는 주가 등락이 발생했으므로, 초보 투자자는 단기 시세 변동성에 유의할 필요가 있습니다. [근거: 최고·최저 종가 차이 분석]</li>
+        </ul>
+      </div>
+
+      <!-- 3. 남은 질문 -->
+      <div class="triad-box question">
+        <div class="triad-title">
+          <span>❓ 남은 질문 (Unresolved Questions)</span>
+        </div>
+        <ul>
+          <li><strong>규제 영향 검증:</strong> 기사 제목에서 제기된 텍사스 선거 및 정치 지형 변화가 테슬라 본사 및 자율주행(FSD/로보택시) 인허가에 실제로 법적·제도적 영향을 미치는지 공식 발표 확인이 필요합니다. [확인 필요]</li>
+          <li><strong>기사 본문 상세 내용:</strong> 본문을 열람하지 못한 5건 기사의 구체적인 사실관계와 세부 인터뷰 맥락에 대한 확인이 필요합니다. [확인 필요]</li>
+          <li><strong>공식 실적 지표:</strong> 뉴스 상의 추측성 기사 대신 테슬라 공식 SEC 분기 보고서(10-Q)의 실제 영업이익률과 차량 인도 실적 수치 대조가 필요합니다. [확인 필요]</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 더 확인할 것 (공식 출처 안내) -->
+  <section class="card">
+    <h2>5. 초보 독자가 더 확인할 것 (공식 출처 안내)</h2>
+    <p>주식 투자를 검토할 때는 기사의 풍문이나 타인의 예측보다는 회사가 공식 제출한 공시와 재무자료를 확인하는 것이 안전합니다.</p>
+    <ul>
+      <li><strong>미국 증권거래위원회(SEC) 공시:</strong> 테슬라 공식 10-K(연간 보고서), 10-Q(분기 보고서)를 통해 공식 매출·순이익·부채비율을 확인하세요.</li>
+      <li><strong>테슬라 공식 IR 웹사이트:</strong> <a href="https://ir.tesla.com" target="_blank" rel="noopener noreferrer" style="color:var(--nv-green);">ir.tesla.com</a>에서 분기별 실적 발표 자료(Shareholder Deck)와 웹캐스트 녹음을 직접 들을 수 있습니다.</li>
+      <li><strong>공식 차량 인도량(Delivery Report):</strong> 매 분기 초 발표되는 공식 분기별 차량 생산 및 인도 실적 발표 자료를 점검하세요.</li>
+    </ul>
+  </section>
+
+  <!-- 9. 자료 검증 및 신뢰도 보고 -->
+  <section class="card">
+    <h2>6. 자료 검증 및 미검증 항목 안내</h2>
+    <div style="display:flex; flex-direction:column; gap:0.85rem;">
+      <div>
+        <span class="tag tag-success">검증 완료 항목</span>
+        <p style="margin-top:0.35rem; font-size:0.95rem; color:var(--nv-text-gray);">
+          - 상장 회사명(Tesla, Inc.), 거래소(NASDAQ), 종목코드(TSLA)<br>
+          - 2026-10-05 ~ 2026-11-04 사이 23거래일 동안의 일별 시가·고가·저가·종가·거래량 데이터 (로컬 <code>tesla_stock_data.json</code> 파일)<br>
+          - 수집된 5건의 뉴스 제목, 발행일, 매체명, 원문 URL (로컬 <code>tesla_news_data.json</code> 파일)
+        </p>
+      </div>
+      <div>
+        <span class="tag tag-danger">미검증 및 제외 항목 (인위적 추정 배제)</span>
+        <p style="margin-top:0.35rem; font-size:0.95rem; color:var(--nv-text-gray);">
+          - <strong>기사 본문 요약 배제:</strong> 수집된 기사 5건은 본문 전문을 열람하지 않았으므로 규정에 따라 [제목·메타정보만 확인]으로 한정하고 본문 임의 요약을 배제했습니다.<br>
+          - <strong>인과관계 단정 배제:</strong> 특정 뉴스를 주가 상승·하락의 원인으로 끼워 맞추지 않았습니다.<br>
+          - <strong>미래 목표가 및 수익 보장 배제:</strong> 목표 주가 제시 및 수익 보장 문구는 원칙상 전면 배제되었습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>보고서 파일: <code>index.html</code> (독립 배포본: <code>stock-report.html</code>) | 시세 원본: <code>tesla_stock_data.json</code> | 뉴스 원본: <code>tesla_news_data.json</code></p>
+    <p>© 테슬라 주식 분석 최종 리포트 (NVIDIA 테크니컬 디자인 시스템 에디션)</p>
+  </footer>
+
+</div>
+
+<!-- 차트 렌더링 스크립트 (외부 라이브러리 없이 순수 SVG 렌더링) -->
+<script>
+  (function() {
+    // 저장된 실제 23거래일 데이터 포인트 (tesla_stock_data.json 기준 - 완벽 보존)
+    const stockData = [
+      {"date": "10-05", "close": 378.73},
+      {"date": "10-06", "close": 380.68},
+      {"date": "10-07", "close": 377.81},
+      {"date": "10-08", "close": 375.00},
+      {"date": "10-09", "close": 382.70},
+      {"date": "10-12", "close": 378.03},
+      {"date": "10-13", "close": 375.23},
+      {"date": "10-14", "close": 367.16},
+      {"date": "10-15", "close": 362.44},
+      {"date": "10-16", "close": 354.72},
+      {"date": "10-19", "close": 368.06},
+      {"date": "10-20", "close": 373.71},
+      {"date": "10-21", "close": 386.47},
+      {"date": "10-22", "close": 374.58},
+      {"date": "10-23", "close": 372.22},
+      {"date": "10-26", "close": 391.62},
+      {"date": "10-27", "close": 407.46},
+      {"date": "10-28", "close": 404.22},
+      {"date": "10-29", "close": 403.30},
+      {"date": "10-30", "close": 399.81},
+      {"date": "11-02", "close": 403.82},
+      {"date": "11-03", "close": 398.50},
+      {"date": "11-04", "close": 385.19}
+    ];
+
+    const svg = document.getElementById("stockChart");
+    const tooltip = document.getElementById("tooltip");
+    const width = 800;
+    const height = 300;
+    const padding = { top: 30, right: 30, bottom: 40, left: 60 };
+
+    const minVal = 340;
+    const maxVal = 420;
+
+    const chartW = width - padding.left - padding.right;
+    const chartH = height - padding.top - padding.bottom;
+
+    // Y축 가이드선 및 레이블 생성
+    const yTicks = [340, 360, 380, 400, 420];
+    yTicks.forEach(tick => {
+      const y = padding.top + chartH - ((tick - minVal) / (maxVal - minVal)) * chartH;
+      
+      // 가이드 점선
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", padding.left);
+      line.setAttribute("y1", y);
+      line.setAttribute("x2", width - padding.right);
+      line.setAttribute("y2", y);
+      line.setAttribute("stroke", "#262626");
+      line.setAttribute("stroke-dasharray", "3,3");
+      svg.appendChild(line);
+
+      // 눈금 수치
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", padding.left - 10);
+      text.setAttribute("y", y + 4);
+      text.setAttribute("text-anchor", "end");
+      text.setAttribute("font-size", "11");
+      text.setAttribute("font-weight", "600");
+      text.setAttribute("fill", "#757575");
+      text.textContent = "$" + tick;
+      svg.appendChild(text);
+    });
+
+    // 좌표 계산
+    const points = stockData.map((d, i) => {
+      const x = padding.left + (i / (stockData.length - 1)) * chartW;
+      const y = padding.top + chartH - ((d.close - minVal) / (maxVal - minVal)) * chartH;
+      return { x, y, data: d };
+    });
+
+    // 배경 그라데이션 영역 (엔비디아 시그니처 그린 그라데이션)
+    const areaPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    let areaD = `M ${points[0].x} ${points[0].y}`;
+    points.slice(1).forEach(p => {
+      areaD += ` L ${p.x} ${p.y}`;
+    });
+    areaD += ` L ${points[points.length - 1].x} ${padding.top + chartH} L ${points[0].x} ${padding.top + chartH} Z`;
+
+    // Gradients
+    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    defs.innerHTML = `
+      <linearGradient id="nvAreaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#76b900" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#76b900" stop-opacity="0.0"/>
+      </linearGradient>
+    `;
+    svg.appendChild(defs);
+
+    areaPath.setAttribute("d", areaD);
+    areaPath.setAttribute("fill", "url(#nvAreaGrad)");
+    svg.appendChild(areaPath);
+
+    // 라인 그리기 (엔비디아 그린 #76b900 라인)
+    const polyline = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    let lineD = `M ${points[0].x} ${points[0].y}`;
+    points.slice(1).forEach(p => {
+      lineD += ` L ${p.x} ${p.y}`;
+    });
+    polyline.setAttribute("d", lineD);
+    polyline.setAttribute("fill", "none");
+    polyline.setAttribute("stroke", "#76b900");
+    polyline.setAttribute("stroke-width", "2.5");
+    polyline.setAttribute("stroke-linejoin", "round");
+    svg.appendChild(polyline);
+
+    // 데이터 포인트 및 X축 레이블
+    points.forEach((p, idx) => {
+      // 날짜 레이블 (일부만 표시)
+      if (idx % 3 === 0 || idx === points.length - 1) {
+        const xText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        xText.setAttribute("x", p.x);
+        xText.setAttribute("y", height - 12);
+        xText.setAttribute("text-anchor", "middle");
+        xText.setAttribute("font-size", "11");
+        xText.setAttribute("font-weight", "600");
+        xText.setAttribute("fill", "#757575");
+        xText.textContent = p.data.date;
+        svg.appendChild(xText);
+      }
+
+      // 포인트 원 (엔비디아 그린 원)
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", p.x);
+      circle.setAttribute("cy", p.y);
+      circle.setAttribute("r", "4");
+      circle.setAttribute("fill", "#000000");
+      circle.setAttribute("stroke", "#76b900");
+      circle.setAttribute("stroke-width", "2");
+      circle.style.cursor = "pointer";
+
+      // 마우스 / 터치 인터랙션
+      const showTooltip = () => {
+        circle.setAttribute("r", "6");
+        circle.setAttribute("fill", "#76b900");
+        tooltip.style.display = "block";
+        tooltip.innerHTML = `<strong>2026-${p.data.date}</strong> : 종가 <strong>${p.data.close} USD</strong>`;
+      };
+
+      const hideTooltip = () => {
+        circle.setAttribute("r", "4");
+        circle.setAttribute("fill", "#000000");
+      };
+
+      circle.addEventListener("mouseenter", showTooltip);
+      circle.addEventListener("mouseleave", hideTooltip);
+      circle.addEventListener("touchstart", (e) => {
+        showTooltip();
+      }, { passive: true });
+
+      svg.appendChild(circle);
+    });
+
+  })();
+</script>
+
+</body>
+</html>
