@@ -1,0 +1,49 @@
+{
+    "articles_count":  5,
+    "articles":  [
+                     {
+                         "read_scope":  "제목·메타정보만 확인",
+                         "publisher":  "Simply Wall St.",
+                         "link":  "https://finance.yahoo.com/technology/ai/articles/tesla-tsla-faces-texas-democratic-111123725.html",
+                         "date":  "2026-11-05 20:11:23",
+                         "summary":  "본문 미열람 (원칙에 따라 자의적 요약 배제)",
+                         "title":  "Tesla (TSLA) Faces Texas Democratic Sweep That Threatens AI And Autonomy Plans"
+                     },
+                     {
+                         "read_scope":  "제목·메타정보만 확인",
+                         "publisher":  "LA Times",
+                         "link":  "https://finance.yahoo.com/technology/ai/articles/democratic-landslide-means-gop-booster-110000010.html",
+                         "date":  "2026-11-05 20:00:00",
+                         "summary":  "본문 미열람 (원칙에 따라 자의적 요약 배제)",
+                         "title":  "What the Democratic landslide means for GOP booster Elon Musk and his businesses"
+                     },
+                     {
+                         "read_scope":  "제목·메타정보만 확인",
+                         "publisher":  "Stocktwits",
+                         "link":  "https://finance.yahoo.com/markets/stocks/articles/us-futures-mixed-rally-wednesday-101026817.html",
+                         "date":  "2026-11-05 19:10:26",
+                         "summary":  "본문 미열람 (원칙에 따라 자의적 요약 배제)",
+                         "title":  "US Futures Mixed After Rally On Wednesday - MU, TSLA, AAPL, MSFT, APP, NVDA, IREN In Focus"
+                     },
+                     {
+                         "read_scope":  "제목·메타정보만 확인",
+                         "publisher":  "Stocktwits",
+                         "link":  "https://finance.yahoo.com/markets/stocks/articles/tsla-stock-slips-overnight-analysts-052212373.html",
+                         "date":  "2026-11-05 14:22:12",
+                         "summary":  "본문 미열람 (원칙에 따라 자의적 요약 배제)",
+                         "title":  "TSLA Stock Slips Overnight: Analysts Flag Political, Premium Risks To SpaceX Merger - Cathie Wood\u0027s ARK Buys Anyway"
+                     },
+                     {
+                         "read_scope":  "제목·메타정보만 확인",
+                         "publisher":  "Stocktwits",
+                         "link":  "https://finance.yahoo.com/markets/stocks/articles/tesla-uber-could-triple-5-041525654.html",
+                         "date":  "2026-11-05 13:15:25",
+                         "summary":  "본문 미열람 (원칙에 따라 자의적 요약 배제)",
+                         "title":  "Tesla, Uber Could Triple In 5 Years? Elon Musk Ally Jason Calacanis Says Both Stocks Are \u002750% Undervalued\u0027"
+                     }
+                 ],
+    "source":  "Yahoo Finance News Feed (공개 접근 피드)",
+    "company_name":  "Tesla, Inc.",
+    "collected_at":  "2026-11-05 20:47:24",
+    "ticker":  "TSLA"
+}
